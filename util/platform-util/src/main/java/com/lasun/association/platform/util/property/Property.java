@@ -83,18 +83,40 @@ public final class Property {
      * @return 所有匹配到的值数组
      */
     public static String[] getValues(String pattern) {
-        Pattern pat=Pattern.compile(pattern);
-        Set<Map.Entry<Object,Object>> entries=properties.entrySet();
-        List<String> values=new ArrayList<>(entries.size());
-        entries.forEach((entry)->{
-            Object key=entry.getKey();
-            Object value=entry.getValue();
-            if(key!=null&&value!=null){
-                if(pat.matcher(key.toString()).matches()){
+        Pattern pat = Pattern.compile(pattern);
+        Set<Map.Entry<Object, Object>> entries = properties.entrySet();
+        List<String> values = new ArrayList<>(entries.size());
+        entries.forEach((entry) -> {
+            Object key = entry.getKey();
+            Object value = entry.getValue();
+            if (key != null && value != null) {
+                if (pat.matcher(key.toString()).matches()) {
                     values.add(value.toString());
                 }
             }
         });
         return values.toArray(new String[]{});
+    }
+
+    /**
+     * 通过正则表达式获得属性键值对
+     *
+     * @param pattern key值正则表达式
+     * @return 所有匹配到的键值对
+     */
+    public static Map<String, String> getKeyValues(String pattern) {
+        Map<String,String> result=new HashMap<>();
+        Pattern pat = Pattern.compile(pattern);
+        Set<Map.Entry<Object, Object>> entries = properties.entrySet();
+        entries.forEach((entry) -> {
+            Object key = entry.getKey();
+            Object value = entry.getValue();
+            if (key != null && value != null) {
+                if (pat.matcher(key.toString()).matches()) {
+                    result.put(String.valueOf(key),String.valueOf(value));
+                }
+            }
+        });
+        return result;
     }
 }

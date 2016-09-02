@@ -1,9 +1,7 @@
 package com.lasun.association.platform.util.weixin.message.send.accessToken;
 
-import com.lasun.association.platform.util.weixin.WeChartConfig;
+import com.lasun.association.platform.util.weixin.config.WeChartConfig;
 import com.lasun.association.platform.util.weixin.annotations.WeChartMessage;
-import com.lasun.association.platform.util.weixin.message.BaseInputMessage;
-import com.lasun.association.platform.util.weixin.message.BaseOutputMessage;
 import com.lasun.association.platform.util.weixin.message.send.BaseSendInputMessage;
 import com.lasun.association.platform.util.weixin.message.send.BaseSendOutputMessage;
 
@@ -19,9 +17,9 @@ public class AccessTokenOutputMessage extends BaseSendOutputMessage {
     private final String secret;
     private final String grant_type = "client_credential";
 
-    public AccessTokenOutputMessage() {
-        appid = WeChartConfig.getAppId();
-        secret = WeChartConfig.getAppSecurity();
+    public AccessTokenOutputMessage(String appId, String appSecret) {
+        this.appid = appId;
+        this.secret = appSecret;
     }
 
     @Override
@@ -31,7 +29,7 @@ public class AccessTokenOutputMessage extends BaseSendOutputMessage {
 
     @Override
     public String getUrl() {
-        return URL ;
+        return URL;
     }
 
     public String getAppid() {

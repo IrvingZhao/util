@@ -8,7 +8,7 @@ import com.lasun.association.platform.util.remote.http.enums.KeyStoreType;
  *
  * @author 赵嘉楠
  */
-public class SSLConfig {
+class SSLConfig {
     /**
      * 构建配置信息
      *

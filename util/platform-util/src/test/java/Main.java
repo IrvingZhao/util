@@ -1,3 +1,4 @@
+import com.lasun.association.platform.util.property.Property;
 import com.lasun.association.platform.util.remote.http.ClientConfig;
 import com.lasun.association.platform.util.remote.http.HttpMessage;
 import com.lasun.association.platform.util.remote.http.HttpUtil;
@@ -9,6 +10,9 @@ import com.lasun.association.platform.util.weixin.message.send.accessToken.Acces
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by irving on 2016/8/10.
@@ -88,20 +92,32 @@ public class Main {
 //        }
 //        util.sendMessage(message);
 
-        AccessTokenOutputMessage accessTokenOutputMessage = new AccessTokenOutputMessage();
-//        System.out.println(accessTokenOutputMessage.getParamMap());
-//        System.out.println(accessTokenOutputMessage.getSerialContent());
-        System.out.println(accessTokenOutputMessage.getAppid());
-        HttpMessage message = new HttpMessage(accessTokenOutputMessage.getUrl(), HttpMethod.GET, RequestType.NORMAL, accessTokenOutputMessage.getParamMap());
-        new HttpUtil(new ClientConfig().setCharset(Charset.forName("ISO-8859-1"))).sendMessage(message);
-        InputStream stream = message.getResponseStream();
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-//        String temp;
-//        while ((temp = reader.readLine()) != null) {
-//            System.out.println(temp);
-//        }
+//        AccessTokenOutputMessage accessTokenOutputMessage = new AccessTokenOutputMessage();
+////        System.out.println(accessTokenOutputMessage.getParamMap());
+////        System.out.println(accessTokenOutputMessage.getSerialContent());
+//        System.out.println(accessTokenOutputMessage.getAppid());
+//        HttpMessage message = new HttpMessage(accessTokenOutputMessage.getUrl(), HttpMethod.GET, RequestType.NORMAL, accessTokenOutputMessage.getParamMap());
+//        new HttpUtil(new ClientConfig().setCharset(Charset.forName("ISO-8859-1"))).sendMessage(message);
+//        InputStream stream = message.getResponseStream();
+////        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+////        String temp;
+////        while ((temp = reader.readLine()) != null) {
+////            System.out.println(temp);
+////        }
+//
+//        AccessTokenInputMessage inputMessge = SerialUtil.getSerialUtil().parse(stream, AccessTokenInputMessage.class, SerialUtil.SerialType.JSON);
+//        System.out.println(inputMessge.getAccess_token());
+//        Map<String,String> properties= Property.getKeyValues("wx\\.(\\w)*\\.(appId|appsecurity){1,1}");
+//        properties.entrySet().forEach((entity)->{
+//            System.out.println(entity.getKey());
+//            System.out.println(entity.getValue());
+//        });
 
-        AccessTokenInputMessage inputMessge = SerialUtil.getSerialUtil().parse(stream, AccessTokenInputMessage.class, SerialUtil.SerialType.JSON);
-        System.out.println(inputMessge.getAccess_token());
+        String s="wx.test.se";
+        Pattern appId=Pattern.compile("wx\\.(\\w*)\\.appId");
+        Matcher matcher=appId.matcher(s);
+        if(matcher.matches()){
+            System.out.println(matcher.group(1));
+        }
     }
 }
