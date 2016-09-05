@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * </ul>
  * <p>其中name值为配置名称，组件支持多个微信配置。</p>
  * <p>在调用微信工具类时，不传入name值，将调用name为default的配置</p>
- * <p>属性名区分大小写</p>
+ * <p>属性名不区分大小写</p>
  *
  * @author 赵嘉楠
  */
@@ -41,29 +41,38 @@ public class PropertyWeChartConfigFactory implements WeChartConfigFactory{
     }
 
     public void loadWeChartConfigs(){
-        Map<String,String> weChartConfig=Property.getKeyValues("wx\\.[\\w]*\\.(appId|appSecurity|securityToken|encodingAesKey|messageType){1,1}");
+        Pattern pattern=Pattern.compile("wx\\.[\\w]*\\.(appId|appSecurity|securityToken|encodingAesKey|messageType){1,1}",Pattern.CASE_INSENSITIVE);
+        Map<String,String> weChartConfig=Property.getKeyValues(pattern);
         weChartConfig.entrySet().forEach((item)->{
             String key=item.getKey();
             Matcher matcher=configMatcher.matcher(key);
             String name=matcher.group(1);
+            String prop=matcher.group(2).toLowerCase();
             WeChartConfig config=weChartConfigCache.get(name);
             if(config==null){
                 config=new WeChartConfig();
                 weChartConfigCache.put(name,config);
             }
-            switch (matcher.group(2)){
-                case "appId":config.setAppId(item.getValue());break;
-                case "appSecurity":config.setAppSecurity(item.getValue());break;
-                case "securityToken":config.setSecurityToken(item.getValue());break;
-                case "encodingAesKey":config.setEncodingAesKey(item.getValue());break;
-                case "messageType":config.setMessageType(WeChartMessageSecurityType.valueOf(item.getValue()));break;
+            if(prop.equals("appid")){
+                config.setAppId(item.getValue());
+            }else if(prop.equals("appsecurity")){
+                config.setAppSecurity(item.getValue());
+            }else if(prop.equals("securitytoken")){
+                config.setSecurityToken(item.getValue());
+            }else if(prop.equals("encodingaeskey")){
+                config.setEncodingAesKey(item.getValue());
+            }else if (prop.equals("messagetype")){
+                config.setMessageType(WeChartMessageSecurityType.valueOf(item.getValue()));
             }
         });
+        if(weChartConfigCache.size()==0){
+            weChartConfigCache.put(DEFAULT_NAME,weChartConfigCache.entrySet().iterator().next().getValue());
+        }
     }
 
     @Override
     public WeChartConfig getWeChartConfig() {
-        return getWeChartConfig("default");
+        return getWeChartConfig(DEFAULT_NAME);
     }
 
     @Override

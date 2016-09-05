@@ -105,14 +105,18 @@ public final class Property {
      * @return 所有匹配到的键值对
      */
     public static Map<String, String> getKeyValues(String pattern) {
-        Map<String,String> result=new HashMap<>();
         Pattern pat = Pattern.compile(pattern);
+        return getKeyValues(pat);
+    }
+
+    public static Map<String,String> getKeyValues(Pattern pattern){
+        Map<String,String> result=new HashMap<>();
         Set<Map.Entry<Object, Object>> entries = properties.entrySet();
         entries.forEach((entry) -> {
             Object key = entry.getKey();
             Object value = entry.getValue();
             if (key != null && value != null) {
-                if (pat.matcher(key.toString()).matches()) {
+                if (pattern.matcher(key.toString()).matches()) {
                     result.put(String.valueOf(key),String.valueOf(value));
                 }
             }

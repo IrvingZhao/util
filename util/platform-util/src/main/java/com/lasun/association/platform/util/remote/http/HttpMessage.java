@@ -69,6 +69,16 @@ public class HttpMessage {
     }
 
     /**
+     * 添加多个请求参数
+     *
+     * @param params 请求参数
+     */
+    public HttpMessage addRequestParams(Map<String, Object> params) {
+        requestParams.putAll(params);
+        return this;
+    }
+
+    /**
      * 设置请求流，只有在流请求的形式才会使用
      *
      * @param inputStream 流提交
